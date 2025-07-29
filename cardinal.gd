@@ -50,6 +50,9 @@ static func angle_index(angle: float, cardinal: bool = false) -> int:
 	return floori((roundi((angle * scl) + 1) % divisions) / 2.0)
 
 static func dir_of(vec: Vector2, cardinal: bool = false) -> Direction:
+	return dir_of_angle(vec.angle(), cardinal)
+
+static func dir_of_angle(angle: float, cardinal: bool = false) -> Direction:
 	const DIRECTIONS: Array = [
 		Direction.WEST,
 		Direction.NORTHWEST,
@@ -66,7 +69,7 @@ static func dir_of(vec: Vector2, cardinal: bool = false) -> Direction:
 		Direction.EAST,
 		Direction.SOUTH
 	]
-	var index: int = angle_index(vec.angle(), cardinal)
+	var index: int = angle_index(angle, cardinal)
 	return DIRECTIONS_CARDINAL[index] if cardinal else DIRECTIONS[index];
 
 static func name(dir: Direction) -> String:

@@ -166,3 +166,7 @@ func register_follower(follower: Follower) -> Node2D:
 
 func can_warp(warp: Node) -> bool:
 	return true
+
+func on_warped(warp: Warp2D, trg: Node2D) -> void:
+	self.facing_dir = Cardinal.dir_of_angle(trg.global_rotation)
+
