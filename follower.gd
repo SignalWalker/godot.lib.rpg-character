@@ -22,6 +22,7 @@ var target: Node2D:
 			followed = target.call(&"register_follower", self)
 		else:
 			followed = target
+
 ## When in LINE mode, the effective target.
 var followed: Node2D
 
@@ -62,7 +63,7 @@ func _ready() -> void:
 		sprite.frame = 1
 
 func _physics_process(_delta: float) -> void:
-	var effective_target: Node2D = self.target
+	var effective_target := self.target
 	match mode:
 		FollowerMode.LINE:
 			effective_target = followed
@@ -82,7 +83,7 @@ func _physics_process(_delta: float) -> void:
 	if distance >= max_separation:
 		state = FollowerState.CATCHING_UP
 	elif distance <= min_separation:
-		var target_vel: Vector2 = effective_target.get("velocity")
+		var target_vel := effective_target.get("velocity") as Vector2
 		if target_vel == null || is_zero_approx(target_vel.length()):
 			state = FollowerState.WAITING
 
