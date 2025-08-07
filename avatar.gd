@@ -31,9 +31,6 @@ var sprite: CharacterSprite2D:
 ## whether we should try to interact on the next physics processing step
 var queued_interact: bool = false
 
-## movement to apply when we reach the phyics processing step
-var queued_movement: Vector2 = Vector2.ZERO
-
 ## Registered followers
 var followers: Array = []
 var follower_mode: Follower.FollowerMode = Follower.FollowerMode.LINE:
@@ -77,7 +74,8 @@ func _physics_process(_delta: float) -> void:
 	if self.queued_interact:
 		self._interact()
 
-	var input_vec: Vector2 = self.queued_movement
+	# TODO :: customizable input names?
+	var input_vec := Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
 
 	if !is_zero_approx(input_vec.length()):
 		# update facing
@@ -138,6 +136,7 @@ func _interact() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_menu"):
 		# open the pause menu
+		# FIX :: assumes existence of SceneManager and menu
 		SceneManager.push_overlay(preload("res://gui/menu.tscn").instantiate())
 		get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("interact"):
@@ -145,13 +144,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		self.queued_interact = true
 		get_viewport().set_input_as_handled()
 
-	# queue up some movement
-	self.queued_movement = Input.get_vector(&"move_left", &"move_right", &"move_up", &"move_down")
-
 # [--------] FOLLOWERS [--------]
 
 func register_follower(follower: Follower) -> Node2D:
-	#print("registering follower for %s: %s" % [name, follower.name])
 	var back: Node2D
 	if followers.size() == 0:
 		back = self
@@ -164,9 +159,14 @@ func register_follower(follower: Follower) -> Node2D:
 
 # [--------] WARP [--------]
 
-func can_warp(warp: Node) -> bool:
-	return true
+## Used by Warp2D to determine whether this can be warped
+func can_warp(warp: Warp2D) -> bool:
+	# only warp if we're moving towards the warp node
+	var to_wrp := warp.global_position - self.global_position
+	return to_wrp.normalized().dot(self.velocity.normalized()) >= 0.5
 
 func on_warped(warp: Warp2D, trg: Node2D) -> void:
 	self.facing_dir = Cardinal.dir_of_angle(trg.global_rotation)
+	for follower: Follower in self.followers:
+		follower._target_warped(warp, trg)
 

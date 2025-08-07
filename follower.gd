@@ -115,3 +115,6 @@ func _physics_process(_delta: float) -> void:
 		self.facing_dir = Cardinal.dir_of(r_vel)
 		if !self.sprite.is_playing():
 			self.sprite.play_dir()
+
+func _target_warped(warp: Warp2D, trg: Node2D) -> void:
+	self.global_position = self.target.global_position

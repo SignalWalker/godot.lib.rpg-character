@@ -45,8 +45,10 @@ var _actual_dir: Cardinal.Direction = Cardinal.Direction.SOUTH:
 # 		p = p.get_parent()
 # 	self.phys_ancestor = null
 
-func _enter_tree() -> void:
+func _init() -> void:
 	self.sprite_frames_changed.connect(self._on_frames_changed)
+
+func _enter_tree() -> void:
 	self._on_frames_changed()
 
 func _on_frames_changed() -> void:
