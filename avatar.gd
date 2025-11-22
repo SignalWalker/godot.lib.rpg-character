@@ -60,11 +60,8 @@ func _ready() -> void:
 		if child is CharacterSprite2D:
 			self.sprite = child as CharacterSprite2D
 			break
-
-	for f: PartyMember in StateManager.active_followers():
-		var follower: Follower = f.instantiate_follower()
-		follower.position = self.position
-		self.add_sibling.call_deferred(follower)
+	if self.sprite == null:
+		push_error("Avatar {0} could not find CharacterSprite2D".format([self.name]))
 
 # movement :)
 func _physics_process(_delta: float) -> void:
@@ -138,11 +135,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		# open the pause menu
 		# FIX :: assumes existence of SceneManager and menu
 		SceneManager.push_overlay(preload("res://gui/menu.tscn").instantiate())
-		get_viewport().set_input_as_handled()
+		self.get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("interact"):
 		# we gotta wait til _physics_process to actually do the interaction
 		self.queued_interact = true
-		get_viewport().set_input_as_handled()
+		self.get_viewport().set_input_as_handled()
 
 # [--------] FOLLOWERS [--------]
 
