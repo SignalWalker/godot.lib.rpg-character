@@ -72,14 +72,18 @@ static func dir_of_angle(angle: float, cardinal: bool = false) -> Direction:
 	var index: int = angle_index(angle, cardinal)
 	return DIRECTIONS_CARDINAL[index] if cardinal else DIRECTIONS[index];
 
+## Get the name of the given direction
 static func name(dir: Direction) -> String:
 	return (Direction.keys()[dir] as StringName).to_lower()
 
+## Get the direction name of the given vector
 static func vector_name(vec: Vector2, cardinal: bool = false) -> String:
 	return name(dir_of(vec, cardinal))
 
+## Get the animation name for the given direction
 static func animation(dir: Direction) -> String:
 	return "walk_" + name(dir)
 
+## Get the animation name for the given vector
 static func vector_animation(vec: Vector2, cardinal: bool = false) -> String:
 	return animation(dir_of(vec, cardinal))
