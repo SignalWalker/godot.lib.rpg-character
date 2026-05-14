@@ -32,16 +32,7 @@ var sprite: CharacterSprite2D:
 var queued_interact: bool = false
 
 ## Registered followers
-var followers: Array = []
-var follower_mode: Follower.FollowerMode = Follower.FollowerMode.LINE:
-	get:
-		return follower_mode
-	set(value):
-		follower_mode = value
-		#print("changing follower mode to " + Follower.FollowerMode.keys()[mode])
-		for follower: Follower in followers:
-			follower.mode = value
-
+var followers: FollowerSet = FollowerSet.new()
 
 ## Emitted before the avatar tries to interact with something
 signal interacting_with(interactee: Node)
@@ -144,15 +135,7 @@ func _unhandled_input(event: InputEvent) -> void:
 # [--------] FOLLOWERS [--------]
 
 func register_follower(follower: Follower) -> Node2D:
-	var back: Node2D
-	if followers.size() == 0:
-		back = self
-	else:
-		back = followers[-1]
-	followers.push_back(follower)
-	follower.speed = move_speed
-	follower.mode = follower_mode
-	return back
+	return self.followers.register(self, follower)
 
 # [--------] WARP [--------]
 
