@@ -24,7 +24,6 @@ func register(front: Avatar, follower: Follower) -> Node2D:
 		back = _followers[-1]
 	_followers.push_back(follower)
 	follower.speed = front.move_speed
-	follower.mode = front.follower_mode
 	return back
 
 
