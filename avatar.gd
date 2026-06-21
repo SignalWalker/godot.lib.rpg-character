@@ -124,8 +124,7 @@ func _interact() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_menu"):
 		# open the pause menu
-		# FIX :: assumes existence of SceneManager and menu
-		SceneManager.push_overlay(preload("res://gui/menu.tscn").instantiate())
+		SceneManager.push_scene(preload("res://gui/menu.tscn").instantiate())
 		self.get_viewport().set_input_as_handled()
 	elif event.is_action_pressed("interact"):
 		# we gotta wait til _physics_process to actually do the interaction
@@ -149,4 +148,3 @@ func on_warped(warp: Warp2D, trg: Node2D) -> void:
 	self.facing_dir = Cardinal.dir_of_angle(trg.global_rotation)
 	for follower: Follower in self.followers:
 		follower._target_warped(warp, trg)
-
